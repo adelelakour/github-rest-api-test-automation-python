@@ -10,6 +10,6 @@ def get_user(username: str):
 
 response_body = get_user("adelelakour")
 for line in response_body.headers:
-    print (f" {line}, {response_body.headers[line]}")
+    print (f" {line} : {response_body.headers[line]}")
 # print(json.dumps(response_body.json(), indent=4))
 
