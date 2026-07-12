@@ -2,8 +2,15 @@ import pytest
 from users_client import get_user
 
 
-def test_existing_user():
-    user_name = "adelelakour"
+
+@pytest.mark.parametrize(
+    "user_name",
+    [
+        "adelelakour",
+        "elakourAdel"
+    ],
+)
+def test_existing_user(user_name):
     response = get_user(user_name)
     assert response.status_code == 200
     response_body = response.json()
@@ -24,11 +31,13 @@ def test_existing_user():
     for field in important_fields:
         assert field in response_body
 
-    assert response_body["login"] == user_name
+    assert response_body["login"].lower() == user_name.lower()
     assert response_body["id"] is None or isinstance(response_body["id"], int)
     assert response_body["type"] == "User"
     assert response_body["name"] is None or isinstance(response_body["name"], str)
     assert response_body["location"] is None or isinstance(response_body["location"], str)
+    assert response_body["url"] == f"https://api.github.com/users/{user_name}"
+    assert response_body["html_url"] == f"https://github.com/{user_name}"
 
     #response header validation
     header_important_fields = [
