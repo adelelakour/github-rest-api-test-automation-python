@@ -24,3 +24,23 @@ USER_SCHEMA = {
         },
     },
 }
+
+
+ERROR_SCHEMA = {
+    "type": "object",
+    "required": [
+        "message",
+        "documentation_url",
+    ],
+    "properties": {
+        "message": {
+            "type": "string",
+        },
+        "documentation_url": {
+            "type": "string",
+        },
+        "status": {
+            "type": ["string", "integer"],
+        },
+    },
+}

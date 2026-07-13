@@ -1,7 +1,7 @@
 import pytest
 from src.users.users_client import get_user
-import jsonschema
-from src.users.schema import USER_SCHEMA
+from src.users.validators import validate_valid_user, validate_invalid_user
+
 
 @pytest.mark.parametrize(
     "user_name",
@@ -16,7 +16,7 @@ def test_existing_user(user_name):
     response_body = response.json()
 
     #validate response body
-    jsonschema.validate(instance=response_body, schema=USER_SCHEMA)
+    validate_valid_user(response_body)
 
     assert response_body["login"].lower() == user_name.lower()
     assert response_body["type"] == "User"
@@ -50,7 +50,7 @@ def test_existing_user(user_name):
 def test_non_existing_user():
     response = get_user("%#$#$#$#%^#$#$%#^%##!#$#@$")
     assert response.status_code == 404
-    assert response.json()["message"] == 'Not Found'
+    validate_invalid_user(response.json())
 
 
 
