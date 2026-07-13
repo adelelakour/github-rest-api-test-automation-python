@@ -1,5 +1,6 @@
 import pytest
-from users_client import get_user
+
+from src.users.users_client import get_user
 
 
 
@@ -31,12 +32,21 @@ def test_existing_user(user_name):
     for field in important_fields:
         assert field in response_body
 
+
+    assert isinstance(response_body["login"], str)
     assert response_body["login"].lower() == user_name.lower()
-    assert response_body["id"] is None or isinstance(response_body["id"], int)
+
+    assert isinstance(response_body["id"], int)
+
+    assert isinstance(response_body["type"], str)
     assert response_body["type"] == "User"
+
     assert response_body["name"] is None or isinstance(response_body["name"], str)
     assert response_body["location"] is None or isinstance(response_body["location"], str)
+
+    assert isinstance(response_body["url"], str)
     assert response_body["url"] == f"https://api.github.com/users/{user_name}"
+    assert isinstance(response_body["html_url"], str)
     assert response_body["html_url"] == f"https://github.com/{user_name}"
 
     #response header validation
