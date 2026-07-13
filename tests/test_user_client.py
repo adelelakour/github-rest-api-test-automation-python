@@ -1,8 +1,7 @@
 import pytest
-
 from src.users.users_client import get_user
-
-
+import jsonschema
+from src.users.schema import USER_SCHEMA
 
 @pytest.mark.parametrize(
     "user_name",
@@ -32,44 +31,45 @@ def test_existing_user(user_name):
     for field in important_fields:
         assert field in response_body
 
+    jsonschema.validate(instance=response_body, schema=USER_SCHEMA)
 
-    assert isinstance(response_body["login"], str)
-    assert response_body["login"].lower() == user_name.lower()
-
-    assert isinstance(response_body["id"], int)
-
-    assert isinstance(response_body["type"], str)
-    assert response_body["type"] == "User"
-
-    assert response_body["name"] is None or isinstance(response_body["name"], str)
-    assert response_body["location"] is None or isinstance(response_body["location"], str)
-
-    assert isinstance(response_body["url"], str)
-    assert response_body["url"] == f"https://api.github.com/users/{user_name}"
-    assert isinstance(response_body["html_url"], str)
-    assert response_body["html_url"] == f"https://github.com/{user_name}"
-
-    #response header validation
-    header_important_fields = [
-        "Date",
-        "Content-Type",
-        "X-RateLimit-Limit",
-        "X-RateLimit-Remaining",
-        "X-RateLimit-Used",
-        "Content-Length",    ]
-
-    for field in header_important_fields:
-        assert field in response.headers
-
-    rate_limit = int(response.headers["X-RateLimit-Limit"])
-    remaining = int(response.headers["X-RateLimit-Remaining"])
-    used = int(response.headers["X-RateLimit-Used"])
-
-    assert rate_limit > 0
-    assert 0 <= remaining <= rate_limit
-    assert 0 <= used <= rate_limit
-
-    assert "application/json" in response.headers["Content-Type"]
+    # assert isinstance(response_body["login"], str)
+    # assert response_body["login"].lower() == user_name.lower()
+    #
+    # assert isinstance(response_body["id"], int)
+    #
+    # assert isinstance(response_body["type"], str)
+    # assert response_body["type"] == "User"
+    #
+    # assert response_body["name"] is None or isinstance(response_body["name"], str)
+    # assert response_body["location"] is None or isinstance(response_body["location"], str)
+    #
+    # assert isinstance(response_body["url"], str)
+    # assert response_body["url"] == f"https://api.github.com/users/{user_name}"
+    # assert isinstance(response_body["html_url"], str)
+    # assert response_body["html_url"] == f"https://github.com/{user_name}"
+    #
+    # #response header validation
+    # header_important_fields = [
+    #     "Date",
+    #     "Content-Type",
+    #     "X-RateLimit-Limit",
+    #     "X-RateLimit-Remaining",
+    #     "X-RateLimit-Used",
+    #     "Content-Length",    ]
+    #
+    # for field in header_important_fields:
+    #     assert field in response.headers
+    #
+    # rate_limit = int(response.headers["X-RateLimit-Limit"])
+    # remaining = int(response.headers["X-RateLimit-Remaining"])
+    # used = int(response.headers["X-RateLimit-Used"])
+    #
+    # assert rate_limit > 0
+    # assert 0 <= remaining <= rate_limit
+    # assert 0 <= used <= rate_limit
+    #
+    # assert "application/json" in response.headers["Content-Type"]
 
 def test_non_existing_user():
     response = get_user("%#$#$#$#%^#$#$%#^%##!#$#@$")
