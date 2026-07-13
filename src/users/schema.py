@@ -9,13 +9,18 @@ USER_SCHEMA = {
         "public_repos",
         "followers",
         "following",
-        "created_at",
-        "updated_at",
+        "name",
+        "location",
     ],
     "properties": {
         "login": {"type": "string"},
         "id": {"type": "integer"},
+        "url": {"type": "string"},
+        "html_url": {"type": "string"},
         "type": {"type": "string"},
+        "public_repos": {"type": "integer"},
+        "followers": {"type": "integer"},
+        "following": {"type": "integer"},
         "name": {
             "type": ["string", "null"]
         },

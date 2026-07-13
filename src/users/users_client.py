@@ -1,15 +1,10 @@
 import json
 import requests
 
+BASE_URL = "https://api.github.com/users"
+DEFAULT_TIMEOUT = 5
 
 def get_user(username: str):
-    resource_url = "https://api.github.com/users"
-    endpoint = f"{resource_url}/{username}"
-    return requests.get(endpoint)
-
-
-response_body = get_user("adelelakour")
-for line in response_body.json():
-    print (f" {line} : {response_body.json()[line]}")
-# print(json.dumps(response_body.json(), indent=4))
-
+    endpoint = f"{BASE_URL}/{username}"
+    response = requests.get(endpoint, timeout=DEFAULT_TIMEOUT)
+    return response

@@ -48,7 +48,7 @@ def test_existing_user(user_name):
     assert "application/json" in response.headers["Content-Type"]
 
 def test_non_existing_user():
-    response = get_user("%#$#$#$#%^#$#$%#^%##!#$#@$")
+    response = get_user("%#$#$#$#%^#$#$%#^%##!#$#@$_this_should_be_unlikely_username")
     assert response.status_code == 404
     validate_invalid_user(response.json())
 
